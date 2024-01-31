@@ -1,6 +1,6 @@
 import asyncHandler from "../../middleware/async_handler.middleware.js";
-import { Resturant } from "../../model/resturant/resutrant.model..js";
 import cloudinary from "../../utils/cloudinary.utils.js";
+import { Resturant } from "../../model/resturant/resutrant.model..js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
