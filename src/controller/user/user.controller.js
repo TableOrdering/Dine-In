@@ -25,6 +25,7 @@ const registerUser = asyncHandler(async (req, res) => {
 
 const loginUser = asyncHandler(async (req, res) => {
   const { phone, password } = req.body;
+  const userType = "user";
   const user = await User.findOne({ phone });
   if (!user) {
     return res.status(400).json({ message: "User not found" });
@@ -33,9 +34,13 @@ const loginUser = asyncHandler(async (req, res) => {
   if (!isMatch) {
     return res.status(400).json({ message: "Invalid credentials" });
   }
-  const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
-    expiresIn: "1w",
-  });
+  const token = jwt.sign(
+    { id: user._id, userType: userType },
+    process.env.JWT_SECRET,
+    {
+      expiresIn: "1w",
+    }
+  );
   const userResponse = {
     id: user._id,
     name: user.name,

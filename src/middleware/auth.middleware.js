@@ -31,8 +31,15 @@ const auth = (req, res, next) => {
         .json({ message: "Token verification failed, authorization denied" });
     }
 
-    // Attach the user ID from the token to the request for further use in the route
-    req.user = { userId: decoded.id };
+    if (decoded.userType === "user") {
+      req.user = { userId: decoded.id };
+    } else if (decoded.userType === "restaurant") {
+      req.restaurant = { restaurantId: decoded.id };
+    } else if (decoded.userType === "admin") {
+      req.admin = { adminId: decoded.id };
+    } else {
+      return res.status(401).json({ message: "Invalid user type" });
+    }
 
     next();
   } catch (error) {
