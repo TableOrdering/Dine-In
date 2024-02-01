@@ -24,6 +24,11 @@ const menuSchema = new mongoose.Schema({
     ref: "Category",
     required: [true, "Select Category"],
   },
+  subCategory: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "subcategory",
+    required: [true, "Select SubCategory"],
+  },
   isAvailable: {
     type: Boolean,
     default: true,
