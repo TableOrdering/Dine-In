@@ -44,10 +44,15 @@ const createCategory = asyncHandler(async (req, res) => {
 });
 
 const getAllCategory = asyncHandler(async (req, res) => {
-  const category = await Category.find().populate({
-    path: "restaurant",
-    select: "-password",
-  });
+  let { page = 0, limit = 10 } = req.query;
+  const skip = page * limit;
+  const category = await Category.find()
+    .populate({
+      path: "restaurant",
+      select: "-password",
+    })
+    .skip(skip)
+    .limit(parseInt(limit));
   if (!category) {
     return res.status(400).json({ message: "Category not found" });
   }
@@ -104,7 +109,16 @@ const createSubCategory = asyncHandler(async (req, res) => {
 });
 
 const getAllSubCategory = asyncHandler(async (req, res) => {
-  const subcategory = await SubCategory.find().populate("category");
+  let { page = 0, limit = 10 } = req.query;
+  const skip = page * limit;
+  const subcategory = await SubCategory.find()
+    .populate({
+      path: "category",
+      populate: "restaurant",
+    })
+    .skip(skip)
+    .limit(parseInt(limit));
+    
   if (!subcategory) {
     return res.status(400).json({ message: "SubCategory not found" });
   }
