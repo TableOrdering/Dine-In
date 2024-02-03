@@ -25,6 +25,9 @@ const tableSchema = new mongoose.Schema(
       ref: "resturant",
       required: true,
     },
+    qrCodeData: {
+      type: String,
+    },
   },
   {
     versionKey: false,

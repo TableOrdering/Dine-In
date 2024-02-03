@@ -4,24 +4,36 @@ import { Table } from "../../model/resturant/table.model.js";
 const createTable = asyncHandler(async (req, res) => {
   const { name, tableNumber, capacity, status } = req.body;
   const { restaurantId } = req.restaurant;
+
   if (!name || !tableNumber || !capacity || !status) {
     return res.status(400).json({
       message: "All fields are required",
     });
   }
+
   const existingTable = await Table.findOne({ tableNumber });
   if (existingTable) {
     return res.status(400).json({ message: "Table already exists" });
   }
+
+  // Generate a unique QR code
+  const qrCodeData = `${restaurantId}-${tableNumber}`;
+
   const tableResponse = await Table({
     name,
     tableNumber,
     capacity,
     status,
     resturant: restaurantId,
+    qrCodeData: qrCodeData,
   });
+
   await tableResponse.save();
-  return res.status(201).json({ message: "Table created successfully" });
+
+  return res.status(201).json({
+    message: "Table created successfully",
+    qrCodeData: qrCodeData,
+  });
 });
 
 const getAllTables = asyncHandler(async (req, res) => {
@@ -44,4 +56,19 @@ const updateTableStatus = asyncHandler(async (req, res) => {
   return res.status(200).json({ message: "Table status updated" });
 });
 
-export { createTable, getAllTables,updateTableStatus };
+const getTableInfo = asyncHandler(async (req, res) => {
+  const { qrCodeData } = req.body;
+  const tableDetails = await Table.findOne({
+    qrCodeData: qrCodeData,
+  })
+    .populate("resturant")
+    .exec();
+
+  if (!tableDetails) {
+    return res.status(404).json({ message: "Table not found" });
+  }
+
+  return res.status(200).json(tableDetails);
+});
+
+export { createTable, getAllTables, updateTableStatus, getTableInfo };
