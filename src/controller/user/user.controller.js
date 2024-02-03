@@ -50,14 +50,6 @@ const loginUser = asyncHandler(async (req, res) => {
   return res.status(200).json(userResponse);
 });
 
-const getAllUsers = asyncHandler(async (req, res) => {
-  const users = await User.find();
-  if (!users) {
-    return res.status(400).json({ message: "No users found" });
-  }
-  return res.status(200).json(users);
-});
-
 const updateUserDetails = asyncHandler(async (req, res) => {
   const { id } = req.body;
   if (!id) {
@@ -74,4 +66,4 @@ const updateUserDetails = asyncHandler(async (req, res) => {
   return res.status(200).json({ message: "User Updated Successfully" });
 });
 
-export { registerUser, loginUser, getAllUsers, updateUserDetails };
+export { registerUser, loginUser, updateUserDetails };

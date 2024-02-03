@@ -54,6 +54,50 @@ const loginAdmin = asyncHandler(async (req, res) => {
   return res.status(200).json(adminResponse);
 });
 
+const registerResturant = asyncHandler(async (req, res) => {
+  try {
+    const { name, description, address, contact, password } = req.body;
+    if (!name || !contact || !password) {
+      return res.status(400).json({ message: "All fields are required" });
+    }
+    const resturant = await Resturant.findOne({ contact });
+    if (resturant) {
+      return res.status(400).json({ message: "Resturant already exists" });
+    }
+    const resImage = await cloudinary.uploader.upload(
+      req.file.path,
+      {
+        folder: "DineIn/",
+        use_filename: true,
+      },
+      (err, resu) => {
+        if (err) {
+          res.status(500);
+          throw new Error(`Error : ${err}`);
+        }
+        console.log(`UpLoaded`);
+      }
+    );
+    if (!resImage) {
+      return res.status(400).json({ message: "Image not uploaded" });
+    }
+    const hashedPassword = await bcrypt.hash(password, 10);
+    const resturantImage = resImage.secure_url;
+    const newResturant = new Resturant({
+      name,
+      contact,
+      description,
+      address,
+      resturantImage,
+      password: hashedPassword,
+    });
+    await newResturant.save();
+    return res.status(200).json({ message: "Resturant registered successfully" });
+  } catch (error) {
+     console.log(error);
+  }
+ });
+
 const getAllResturants = asyncHandler(async (req, res) => {
   let { page = 0, limit = 10 } = req.query;
   const skip = page * limit;
@@ -113,4 +157,5 @@ export {
   getAllUsers,
   deleteResturant,
   deleteUser,
+  registerResturant,
 };

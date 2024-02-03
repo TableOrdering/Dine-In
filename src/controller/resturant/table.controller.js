@@ -67,6 +67,9 @@ const getTableInfo = asyncHandler(async (req, res) => {
   if (!tableDetails) {
     return res.status(404).json({ message: "Table not found" });
   }
+  if (tableDetails.status === false) {
+    return res.status(400).json({ message: "Table already occupied" });
+  }
 
   return res.status(200).json(tableDetails);
 });

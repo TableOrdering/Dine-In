@@ -3,7 +3,6 @@ import { Router } from "express";
 import upload from "../../middleware/multer.middleware.js";
 import {
   loginResturant,
-  registerResturant,
 } from "../../controller/resturant/resturant.controller.js";
 import {
   createProduct,
@@ -12,11 +11,6 @@ import {
 
 const resturantRouter = Router();
 
-resturantRouter.post(
-  "/registerResturant",
-  upload.single("resturantImage"),
-  registerResturant
-);
 resturantRouter.post("/loginResturant", loginResturant);
 resturantRouter
   .route("/createProduct")

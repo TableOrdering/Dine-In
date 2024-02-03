@@ -4,7 +4,7 @@ import cors from "cors";
 import connectDB from "./db/db.js";
 import userRoutes from "./routes/user/user.routes.js";
 import resturantRouter from "./routes/resturant/resturant.routes.js";
-import adminRouter from "./routes/admin/admin.router.js";
+import adminRouter from "./routes/admin/admin.routes.js";
 import categoryRouter from "./routes/resturant/category.routes.js";
 import tableRouter from "./routes/resturant/table.routes.js";
 import helmet from "helmet";
