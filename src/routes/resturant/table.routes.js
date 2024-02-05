@@ -5,6 +5,8 @@ import {
   getAllTables,
   getTableInfo,
   updateTableStatus,
+  deleteTable,
+  updateTableInfo,
 } from "../../controller/resturant/table.controller.js";
 
 const tableRouter = Router();
@@ -14,5 +16,7 @@ tableRouter.route("/createTable").post(createTable);
 tableRouter.route("/getTables").get(getAllTables);
 tableRouter.route("/updateTableStatus").put(updateTableStatus);
 tableRouter.route("/getTableInfo").post(getTableInfo);
+tableRouter.route("/deleteTable").delete(deleteTable);
+tableRouter.route("/updateTable").put(updateTableInfo);
 
 export default tableRouter;

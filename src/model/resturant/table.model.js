@@ -9,7 +9,6 @@ const tableSchema = new mongoose.Schema(
     tableNumber: {
       type: Number,
       required: [true, "Please Enter Table Number"],
-      unique: true,
     },
     capacity: {
       type: Number,
@@ -18,7 +17,8 @@ const tableSchema = new mongoose.Schema(
     status: {
       type: Boolean,
       required: true,
-      default: 0,
+      enum: [true, false],
+      default: true,
     },
     resturant: {
       type: mongoose.Schema.Types.ObjectId,
