@@ -13,6 +13,7 @@ import mongoSanitize from "express-mongo-sanitize";
 import hpp from "hpp";
 import os from "os";
 import cluster from "cluster";
+import itemsRoute from "./routes/resturant/products.routes.js";
 
 dotenv.config({
   path: "./.env",
@@ -28,7 +29,13 @@ app.use(compression());
 app.use(mongoSanitize());
 app.use(hpp());
 app.use("/api/v1/DineIn", userRoutes);
-app.use("/api/v1/resturant", resturantRouter, categoryRouter, tableRouter);
+app.use(
+  "/api/v1/resturant",
+  resturantRouter,
+  categoryRouter,
+  tableRouter,
+  itemsRoute
+);
 app.use("/api/v1/admin", adminRouter);
 
 const PORT = process.env.PORT || 5000;

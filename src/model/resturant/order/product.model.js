@@ -13,6 +13,10 @@ const productSchema = new mongoose.Schema(
       required: true,
     },
     isAvailable: { type: Boolean, default: false },
+    productImage: {
+      type: String,
+      required: [true, "Please Select Product Image"],
+    },
   },
   { versionKey: false, timestamps: true }
 );
