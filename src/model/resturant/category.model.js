@@ -8,6 +8,11 @@ const categorySchema = new mongoose.Schema(
       trim: true,
       unique: true,
     },
+    description: {
+      type: String,
+      required: true,
+      trim: true,
+    },
     resturant: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "resturant",

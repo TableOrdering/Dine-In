@@ -2,6 +2,7 @@ import { Router } from "express";
 import auth from "../../middleware/auth.middleware.js";
 import {
   createCategory,
+  deleteCategory,
   getAllCategory,
   updateCategoryStatus,
 } from "../../controller/resturant/category.controller.js";
@@ -15,10 +16,6 @@ categoryRouter
   .post(upload.single("categoryImage"), createCategory);
 categoryRouter.route("/getAllCategory").get(getAllCategory);
 categoryRouter.route("/updateAvailability").put(updateCategoryStatus);
-// categoryRouter
-//   .route("/createSubCategory")
-//   .post(upload.single("subcategoryImage"), createSubCategory);
-// categoryRouter.route("/getAllSubCategory").get(getAllSubCategory);
-// categoryRouter.route("/updateSubAvailability").put(updateSubCategory);
+categoryRouter.route("/deleteCategory").delete(deleteCategory);
 
 export default categoryRouter;

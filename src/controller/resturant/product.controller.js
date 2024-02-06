@@ -2,6 +2,7 @@ import asyncHandler from "../../middleware/async_handler.middleware.js";
 import cloudinary from "../../utils/cloudinary.utils.js";
 import { Product } from "../../model/resturant/order/product.model.js";
 import { Category } from "../../model/resturant/category.model.js";
+import { extractPublicIdFromUrl } from "../../utils/id_founder.js";
 
 const createProduct = asyncHandler(async (req, res) => {
   const { name, description, price, discount, rating, category, isAvailable } =
@@ -86,10 +87,20 @@ const updateProductStatus = asyncHandler(async (req, res) => {
 
 const deleteProduct = asyncHandler(async (req, res) => {
   const { id } = req.body;
-  const product = await Product.findByIdAndDelete(id);
+  const product = await Product.findById(id);
   if (!product) {
     return res.status(400).json({ message: "Product not found" });
   }
+  if (product.productImage) {
+    try {
+      const publicsId = extractPublicIdFromUrl(product.productImage);
+      const splitter = publicsId.split(".")[0];
+      await cloudinary.uploader.destroy(`Product/${splitter}`);
+    } catch (error) {
+      console.error("Error deleting image:", error);
+    }
+  }
+  await product.deleteOne();
   return res.status(200).json({ message: "Product Deleted" });
 });
 
