@@ -3,15 +3,25 @@ import cloudinary from "../../utils/cloudinary.utils.js";
 import { Product } from "../../model/resturant/order/product.model.js";
 import { Category } from "../../model/resturant/category.model.js";
 import { extractPublicIdFromUrl } from "../../utils/id_founder.js";
+import { Resturant } from "../../model/resturant/resutrant.model..js";
 
 const createProduct = asyncHandler(async (req, res) => {
   console.log(req.body);
   const { name, description, price, discount, rating, category, isAvailable } =
     req.body;
+  const { restaurantId } = req.restaurant;
   if (!name || !description || !price || !category || !isAvailable) {
     return res.status(400).json({ message: "Please fill all the fields" });
   }
-  const existingProduct = await Product.findOne({ name });
+  const restaurant = await Resturant.findById(restaurantId);
+  if (!restaurant) {
+    return res.status(404).json({ message: "Restaurant not found" });
+  }
+
+  const existingProduct = await Product.findOne({
+    name,
+    resturant: restaurantId,
+  });
   if (existingProduct) {
     return res.status(400).json({ message: "Product already exists" });
   }
@@ -55,24 +65,17 @@ const getProduct = asyncHandler(async (req, res) => {
   const skip = page * limit;
   const { restaurantId } = req.restaurant;
 
-  const category = await Category.findOne({ resturant: restaurantId });
-
-  if (!category) {
-    return res
-      .status(404)
-      .json({ message: "Category not found for the given ID" });
-  }
-
-  const products = await Product.find({ category: category._id })
-    .populate({
-      path: "category",
-      populate: "resturant",
-    })
+  // Find the category associated with the restaurant
+  const categories = await Category.find({ resturant: restaurantId });
+  // Extract category IDs
+  const categoryIds = categories.map((category) => category._id);
+  // Find products belonging to the categories of the restaurant
+  const products = await Product.find({ category: { $in: categoryIds } })
+    .populate({ path: "category", populate: "resturant" })
     .skip(skip)
     .limit(parseInt(limit))
     .lean();
-
-  res.status(200).json(products);
+  return res.status(200).json(products);
 });
 
 const updateProductStatus = asyncHandler(async (req, res) => {

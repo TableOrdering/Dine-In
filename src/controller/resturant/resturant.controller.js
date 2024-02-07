@@ -19,7 +19,6 @@ const loginResturant = asyncHandler(async (req, res) => {
       deviceIsPhysical,
       ip,
     } = req.body;
-    console.log(req.body);
     const userType = "restaurant";
     const resturant = await Resturant.findOne({ contact });
     if (!resturant) {

@@ -2,6 +2,7 @@ import asyncHandler from "../../middleware/async_handler.middleware.js";
 import cloudinary from "../../utils/cloudinary.utils.js";
 import { Category } from "../../model/resturant/category.model.js";
 import { extractPublicIdFromUrl } from "../../utils/id_founder.js";
+import { Resturant } from "../../model/resturant/resutrant.model..js";
 
 const createCategory = asyncHandler(async (req, res) => {
   const { name, description, foodType, isAvailable } = req.body;
@@ -9,7 +10,13 @@ const createCategory = asyncHandler(async (req, res) => {
   if (!name || !description || !foodType || !isAvailable) {
     return res.status(400).json({ message: "Please fill all the fields" });
   }
-  const existingcat = await Category.findOne({ name });
+
+  const restaurant = await Resturant.findById(restaurantId);
+  if (!restaurant) {
+    return res.status(404).json({ message: "Restaurant not found" });
+  }
+
+  const existingcat = await Category.findOne({ name, resturant: restaurantId });
   if (existingcat) {
     return res.status(400).json({ message: "Category already exists" });
   }
