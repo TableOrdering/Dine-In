@@ -8,6 +8,10 @@ const resturantSchema = new mongoose.Schema(
     resturantImage: { type: String, required: true },
     contact: { type: Number, required: true, unique: true },
     password: { type: String, required: [true, "Password is Required"] },
+    device: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "DeviceInfo",
+    },
   },
   {
     versionKey: false,

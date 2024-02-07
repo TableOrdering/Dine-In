@@ -5,6 +5,7 @@ import { Category } from "../../model/resturant/category.model.js";
 import { extractPublicIdFromUrl } from "../../utils/id_founder.js";
 
 const createProduct = asyncHandler(async (req, res) => {
+  console.log(req.body);
   const { name, description, price, discount, rating, category, isAvailable } =
     req.body;
   if (!name || !description || !price || !category || !isAvailable) {
