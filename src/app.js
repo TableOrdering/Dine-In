@@ -28,6 +28,7 @@ app.use(helmet());
 app.use(compression());
 app.use(mongoSanitize());
 app.use(hpp());
+
 app.use("/api/v1/DineIn", userRoutes);
 app.use(
   "/api/v1/resturant",
@@ -39,6 +40,10 @@ app.use(
 app.use("/api/v1/admin", adminRouter);
 
 const PORT = process.env.PORT || 5000;
+
+app.get("/test", (req, res) => { 
+  res.send("Server Working");
+});
 
 if (cluster.isPrimary) {
   for (let i = 0; i < numCPUs; i++) cluster.fork();
