@@ -4,6 +4,7 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { Product } from "../../model/resturant/order/product.model.js";
 import { Category } from "../../model/resturant/category.model.js";
+import { Table } from "../../model/resturant/table.model.js";
 
 const registerUser = asyncHandler(async (req, res) => {
   const { name, phone, password } = req.body;
@@ -91,11 +92,15 @@ const updateUserDetails = asyncHandler(async (req, res) => {
 const getCategoryOfResturant = asyncHandler(async (req, res) => {
   let { restaurantId, page = 0, limit = 10 } = req.query;
   const skip = page * limit;
+  if (!restaurantId) {
+    return res.status(400).json({ message: "No Resturant Found" });
+  }
   const category = await Category.find({ resturant: restaurantId })
     .skip(skip)
     .limit(parseInt(limit))
     .lean()
     .exec();
+
   if (!category || category.length === 0) {
     return res.status(404).json([]);
   }
@@ -109,7 +114,7 @@ const getProductsBasedOnCategory = asyncHandler(async (req, res) => {
   }
   const products = await Product.find({ category: category }).exec();
   if (!products || products.length === 0) {
-    return res.status(404).json([]);
+    return res.status(200).json([]);
   }
   return res.status(200).json(products);
 });

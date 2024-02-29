@@ -3,7 +3,6 @@ import auth from "../../middleware/auth.middleware.js";
 import {
   createTable,
   getAllTables,
-  getTableInfo,
   updateTableStatus,
   deleteTable,
   updateTableInfo,
@@ -15,7 +14,6 @@ tableRouter.use(auth);
 tableRouter.route("/createTable").post(createTable);
 tableRouter.route("/getTables").get(getAllTables);
 tableRouter.route("/updateTableStatus").put(updateTableStatus);
-tableRouter.route("/getTableInfo").post(getTableInfo);
 tableRouter.route("/deleteTable").delete(deleteTable);
 tableRouter.route("/updateTable").put(updateTableInfo);
 

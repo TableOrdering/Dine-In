@@ -31,3 +31,22 @@ const orderSchema = new mongoose.Schema(
 );
 
 export const Order = mongoose.model("order", orderSchema);
+
+/* Order Example
+{
+  "orderItems" : [
+      {
+          "quantity": 3,
+          "product" : "5fcfc406ae79b0a6a90d2585"
+      },
+      {
+          "quantity": 2,
+          "product" : "5fd293c7d3abe7295b1403c4"
+      }
+  ],
+  "tableNumber" : "45",
+  "status" : "Placed",
+  "totalPrice": "100",
+  "user": "5fd51bc7e39ba856244a3b44"
+}
+*/
