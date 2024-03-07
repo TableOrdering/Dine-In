@@ -31,14 +31,27 @@ const auth = (req, res, next) => {
         .json({ message: "Token verification failed, authorization denied" });
     }
 
-    if (decoded.userType === "user") {
-      req.user = { userId: decoded.id };
-    } else if (decoded.userType === "restaurant") {
-      req.restaurant = { restaurantId: decoded.id };
-    } else if (decoded.userType === "admin") {
-      req.admin = { adminId: decoded.id };
-    } else {
-      return res.status(401).json({ message: "Invalid user type" });
+    // if (decoded.userType === "user") {
+    //   req.user = { userId: decoded.id };
+    // } else if (decoded.userType === "restaurant") {
+    //   req.restaurant = { restaurantId: decoded.id };
+    // } else if (decoded.userType === "admin") {
+    //   req.admin = { adminId: decoded.id };
+    // } else {
+    //   return res.status(401).json({ message: "Invalid user type" });
+    // }
+    switch (decoded.userType) {
+      case "user":
+        req.user = { userId: decoded.id };
+        break;
+      case "restaurant":
+        req.restaurant = { restaurantId: decoded.id };
+        break;
+      case "admin":
+        req.admin = { adminId: decoded.id };
+        break;
+      default:
+        return res.status(401).json({ message: "Invalid user type" });
     }
 
     next();

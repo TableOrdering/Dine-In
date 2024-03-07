@@ -74,9 +74,11 @@ const loginUser = asyncHandler(async (req, res) => {
 });
 
 const updateUserDetails = asyncHandler(async (req, res) => {
-  const { id } = req.body;
-  if (!id) {
-    return res.status(400).json({ message: "Please enter all fields" });
+  const { userId } = req.user;
+  if (userId) {
+    return res
+      .status(400)
+      .json({ message: "You are not allowed to update user details" });
   }
   const user = await User.findById(id);
   if (!user) {
