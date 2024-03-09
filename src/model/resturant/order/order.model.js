@@ -9,6 +9,12 @@ const orderSchema = new mongoose.Schema(
         required: true,
       },
     ],
+    paymentMode: {
+      type: String,
+      required: [true, "PaymentMode is Required"],
+      enum: ["COD", "Online"],
+      default: "COD",
+    },
     tableNumber: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Table",
@@ -17,13 +23,14 @@ const orderSchema = new mongoose.Schema(
     status: {
       type: String,
       default: "Placed",
+      enum: ["Placed", "Preparing", "Cancelled", "Delivered"],
     },
     totalPrice: {
       type: Number,
     },
     user: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
+      ref: "user",
       required: true,
     },
   },
@@ -44,6 +51,7 @@ export const Order = mongoose.model("order", orderSchema);
           "product" : "5fd293c7d3abe7295b1403c4"
       }
   ],
+  "paymentMode": "COD",
   "tableNumber" : "45",
   "status" : "Placed",
   "totalPrice": "100",

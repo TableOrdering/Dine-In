@@ -1,6 +1,8 @@
 import { Router } from "express";
 import {
+  createOrder,
   getCategoryOfResturant,
+  getOrderHistory,
   getProductsBasedOnCategory,
   loginUser,
   registerUser,
@@ -17,5 +19,8 @@ userRoutes.route("/updateUserDetails").put(auth, updateUserDetails);
 userRoutes.route("/productsBasedOnCate").get(auth, getProductsBasedOnCategory);
 userRoutes.route("/categories").get(auth, getCategoryOfResturant);
 userRoutes.route("/getTableInfo").post(auth, getTableInfo);
+/// 9-03-2024
+userRoutes.route("/createOrder").post(auth, createOrder);
+userRoutes.route("/getOrderHistory").get(auth, getOrderHistory);
 
 export default userRoutes;
