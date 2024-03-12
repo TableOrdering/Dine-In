@@ -4,9 +4,9 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { Product } from "../../model/resturant/order/product.model.js";
 import { Category } from "../../model/resturant/category.model.js";
-import { Table } from "../../model/resturant/table.model.js";
 import { OrderItems } from "../../model/resturant/order/order_items.model.js";
 import { Order } from "../../model/resturant/order/order.model.js";
+import generateOrderNumber from "../../utils/random_number.utils.js";
 
 const registerUser = asyncHandler(async (req, res) => {
   const { name, phone, password } = req.body;
@@ -94,7 +94,6 @@ const updateUserDetails = asyncHandler(async (req, res) => {
 });
 
 const getCategoryOfResturant = asyncHandler(async (req, res) => {
-  console.log("working");
   let { restaurantId, page = 0, limit = 10 } = req.query;
   const skip = page * limit;
   if (!restaurantId) {
@@ -126,7 +125,7 @@ const getProductsBasedOnCategory = asyncHandler(async (req, res) => {
 
 const createOrder = asyncHandler(async (req, res) => {
   const { userId } = req.user;
-  const { orderItems, paymentMode, tableNumber, status } = req.body;
+  const { orderItems, paymentMode, tableNumber } = req.body;
   const user = await User.findById(userId);
   if (orderItems.length === 0) {
     return res.status(400).json({ message: "No Items Found" });
@@ -153,12 +152,13 @@ const createOrder = asyncHandler(async (req, res) => {
       return totalPrice;
     })
   );
+  const orderNumber = generateOrderNumber();
   const totalPrice = totalPrices.reduce((a, b) => a + b, 0);
   const order = new Order({
+    orderNumber,
     orderItems: orderItemsIdsResolved,
     paymentMode,
     tableNumber,
-    status,
     totalPrice,
     user,
   });
@@ -169,12 +169,13 @@ const createOrder = asyncHandler(async (req, res) => {
   return res.status(201).json({ message: "Order Created Successfully" });
 });
 
+
 const getOrderHistory = asyncHandler(async (req, res) => {
   const { userId } = req.user;
   const orders = await Order.find({ user: userId })
     .populate({
       path: "orderItems",
-      populate: { path: "product", populate: "category" },
+      populate: { path: "product" },
     })
     .populate({
       path: "tableNumber",

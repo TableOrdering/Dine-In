@@ -9,6 +9,12 @@ const orderSchema = new mongoose.Schema(
         required: true,
       },
     ],
+    orderNumber: {
+      type: Number,
+      required: true,
+      unique: true,
+      trim: true,
+    },
     paymentMode: {
       type: String,
       required: [true, "PaymentMode is Required"],

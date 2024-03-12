@@ -8,6 +8,11 @@ const orderItemsSchema = new mongoose.Schema(
       ref: "Product",
       required: true,
     },
+    status: {
+      type: String,
+      default: "Placed",
+      enum: ["Placed", "Preparing", "Cancelled", "Delivered"],
+    },
   },
   { versionKey: false, timestamps: true }
 );
