@@ -92,18 +92,23 @@ const registerResturant = asyncHandler(async (req, res) => {
       password: hashedPassword,
     });
     await newResturant.save();
-    return res.status(200).json({ message: "Resturant registered successfully" });
+    return res
+      .status(200)
+      .json({ message: "Resturant registered successfully" });
   } catch (error) {
-     console.log(error);
+    console.log(error);
   }
- });
+});
 
 const getAllResturants = asyncHandler(async (req, res) => {
-  let { page = 0, limit = 10 } = req.query;
+  let { page = 0, limit = 100 } = req.query;
   const skip = page * limit;
   const resturants = await Resturant.find()
     .sort({ _id: -1 })
     .skip(skip)
+    .select("-password")
+    .select("-device")
+    .select("-devices")
     .limit(parseInt(limit))
     .lean();
   if (!resturants) {
