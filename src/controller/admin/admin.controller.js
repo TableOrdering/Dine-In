@@ -147,6 +147,7 @@ const getAllUsers = asyncHandler(async (req, res) => {
   const users = await User.find()
     .sort({ _id: -1 })
     .skip(skip)
+    .select("-password")
     .limit(parseInt(limit))
     .lean();
   if (!users) {

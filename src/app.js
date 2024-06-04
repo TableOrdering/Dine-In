@@ -14,7 +14,7 @@ import hpp from "hpp";
 import os from "os";
 import cluster from "cluster";
 import itemsRoute from "./routes/resturant/products.routes.js";
--
+
 dotenv.config({
   path: "./.env",
 });
@@ -41,21 +41,21 @@ app.use("/api/v1/admin", adminRouter);
 
 const PORT = process.env.PORT || 5000;
 
-app.get("/test", (req, res) => { 
+app.get("/test", (req, res) => {
   res.send("Server Working");
 });
 
-if (cluster.isPrimary) {
-  for (let i = 0; i < numCPUs; i++) cluster.fork();
-  cluster.on("exit", (worker, code, signal) => cluster.fork());
-} else {
+// if (cluster.isPrimary) {
+//   for (let i = 0; i < numCPUs; i++) cluster.fork();
+//   cluster.on("exit", (worker, code, signal) => cluster.fork());
+// } else {
   connectDB()
     .then(() => {
       app.listen(PORT, () => {
         console.log(`Server is running on port ${PORT}`);
       });
     })
-    .catch((e) => {
-      console.log(e);
-    });
-}
+//     .catch((e) => {
+//       console.log(e);
+//     });
+// }
