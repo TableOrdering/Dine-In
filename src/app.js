@@ -39,7 +39,7 @@ app.use(
 );
 app.use("/api/v1/admin", adminRouter);
 
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 8000;
 
 app.get("/api/test", (req, res) => {
   res.send("Server Working");
